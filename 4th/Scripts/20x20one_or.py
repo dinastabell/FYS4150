@@ -16,10 +16,17 @@ ordered=False
 
 
 def plot_MC_cycles(Temp):
+    """
+    This function creates two plots, each containing subplots of the mean energy
+    and absolute magnetization as functions of Monte Carlo cycles, for random and
+    ordered initial lattice configurations.
+    The two plots show the results of two different input temperatures.
+    """
     titles = ['Mean energy and magnetization for temperature: 1.0', 'Mean energy and magnetization for temperature: 2.4']
     steps = np.linspace(1, MC_cycles, MC_cycles, endpoint=True)
     for i, T in enumerate(Temp):
 
+        # Random initial confiuration
         spin_matrix_R = np.random.choice((-1, 1), (num_spins, num_spins))
 
         exp_values_R = I.MC(spin_matrix_R, MC_cycles, T)
@@ -27,7 +34,8 @@ def plot_MC_cycles(Temp):
         magnet_abs_avg_R = np.cumsum(exp_values_R[:, 4])/np.arange(1, MC_cycles+1)
         Energy_R = energy_avg_R/num_spins**2
         MagnetizationAbs_R = magnet_abs_avg_R/num_spins**2
-
+        
+        # Ordered initial confiuration
         spin_matrix_O = np.ones((num_spins,num_spins), np.int8)
 
         exp_values_O = I.MC(spin_matrix_O, MC_cycles, T)

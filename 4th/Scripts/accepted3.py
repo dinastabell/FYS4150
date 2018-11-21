@@ -9,6 +9,14 @@ sns.set_context('talk')
 
 
 def Accepted(ordered):
+    """
+    This function plots the number of accepted configurations in the Ising model
+    as function of Monte Carlo cycles, calculated by the imported function MC from
+    ising_model.py.
+    Two subplots are produced, one for steady initial configuration of the lattice
+    and one for a random configuration, both containing the accepted values for
+    temperature, T=1.0 and T=2.4.
+    """
     titles = ['Random start configuration', 'Ordered start configuration']
     fig, ax = plt.subplots(2, 1, figsize=(18, 10), sharex=True)
     Steps=np.linspace(0, MC_cycles, MC_cycles, endpoint=True)
@@ -26,7 +34,6 @@ def Accepted(ordered):
         accepted_list_T1 = exp_values_T1[:,5]
         accepted_list_T24 = exp_values_T24[:,5]
         ordered=True
-        #plt.suptitle('{}'.format(titles[i]))
         ax[i].set_title('{}'.format(titles[i]))
         ax[i].loglog(Steps, accepted_list_T1, color='C2', label='T = 1.0')
         ax[i].loglog(Steps, accepted_list_T24, color='C4', label='T = 2.4')

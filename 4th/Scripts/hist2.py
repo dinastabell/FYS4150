@@ -14,6 +14,13 @@ Temp = [1.0, 2.4]
 ordered = True
 
 def plotProbability(ordered):
+    """
+    This function show the probability distribution of energy as histograms for
+    two different temperatures and number of Monte Carlo cycles.
+    The calculations are done by the MC function found in the ising_model script.
+    The mean energy and magnetization is evaluated from a point where steady
+    state is reached.
+    """
     for cycles, T in zip(MC_cycles, Temp):
         # Initializing the confiuration of the input spin matrix
         if ordered == False:

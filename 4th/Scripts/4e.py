@@ -7,11 +7,22 @@ sns.set_style('white')
 sns.set_style('ticks')
 sns.set_context('talk')
 
+"""
+This program calculates and plot four thermodynamic quantities derived by the
+Ising model using the MC functions from ising_model.py.
+The result is an ensemble plot with results from the calculations of four different
+lattice sizes. The plots show the thermodynamic quantities as functions of temperature
+with a temperature step of 0.01 [kT/J].
+The number of Monte Carlo cycles is set to 1000 000 and the progress is printed to
+terminal.
+Finally, a nuerical approximation to the critical temperature is calculated and
+printed to terminal.
+"""
 # Initial variables to loop over
 L = [40,60,80,100]
 T = np.arange(2.1, 2.51, 0.01)
 # Number of Monte Carlo cycles for the calculation
-MC_cycles = 100
+MC_cycles = 1000000
 norm = 1.0/float(MC_cycles-40000)
 # Initializing output matrices
 E = np.zeros((len(L),len(T)))
@@ -26,7 +37,7 @@ for i, spins in enumerate(L):
 
     for j, temp in enumerate(T):
         exp_values = I.MC(spin_matrix, MC_cycles, temp)
-
+        # Extracting variables of interest from the output matrix
         energy_avg = np.sum(exp_values[40000:, 0])*norm
         magnet_abs_avg = np.sum(exp_values[40000:, 4])*norm
         energy2_avg = np.sum(exp_values[40000:,2])*norm
@@ -42,35 +53,19 @@ for i, spins in enumerate(L):
         print(temp)
     print(spins)
 
+#Calculating the critical temperature for an infinite lattice
+max_2 = np.argmax(X[2, :])
+max_3 = np.argmax(X[3, :])
+Tc_L2 = T[max_2]
+Tc_L3 = T[max_3]
+# pre-calculating the exponent
+#v = 1.0
+#exponent = -(1./v)
+exponent = -1.0
+Tc_infinity = Tc_L2 - ((Tc_L2-Tc_L3)/(L[2]**exponent-L[3]**exponent))*(L[2]**exponent)
+print(Tc_infinity)
 
 # Plotting the energy, magnetization, specific heat and magnetization
-
-for i in range(4):
-    plt.plot(T, E[i, :], label='L = {}'.format(L[i]))
-    plt.ylabel('Mean Energy')
-    plt.legend(loc='upper left', frameon=False)
-
-
-    """
-    plt.plot(T, M_abs[i, :], label='L = {}'.format(L[i]))
-    plt.ylabel('Mean abs. Magnetization')
-    plt.legend(loc='upper right', frameon=False)
-
-    plt.plot(T, C_v[i, :], label='L = {}'.format(L[i]))
-    plt.ylabel('Specitfic Heat')
-    plt.legend(loc='upper left', frameon=False)
-
-    plt.plot(T, X[i, :], label='L = {}'.format(L[i]))
-    plt.ylabel('Susceptibility')
-    plt.legend(loc='upper right', frameon=False)
-
-    plt.xlabel('Temperature')
-    plt.xlabel('Temperature')
-    """
-#plt.suptitle('Numerical studies of phase transitions')
-#plt.savefig('PT_longrun.png')
-plt.show()
-"""
 fig, ax = plt.subplots(2, 2, figsize=(18, 12), sharex=True)
 for i in range(4):
     ax[0, 0].plot(T, E[i, :], label='L = {}'.format(L[i]))
@@ -93,18 +88,5 @@ for i in range(4):
     ax[1, 1].set_xlabel('Temperature')
 
 plt.suptitle('Numerical studies of phase transitions')
-plt.savefig('PT_longrun.png')
+plt.savefig('PT_1e6.png')
 plt.show()
-"""
-#Calculating the critical temperature for an infinite lattice
-max_2 = np.argmax(X[2, :])
-max_3 = np.argmax(X[3, :])
-Tc_L2 = T[max_2]
-Tc_L3 = T[max_3]
-# pre-calculating the exponent
-#v = 1.0
-#exponent = -(1./v)
-exponent = -1.0
-Tc_infinity = Tc_L2 - ((Tc_L2-Tc_L3)/(L[2]**exponent-L[3]**exponent))*(L[2]**exponent)
-print(Tc_infinity)
-#Result: 2.29

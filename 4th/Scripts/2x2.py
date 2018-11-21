@@ -1,8 +1,15 @@
 import numpy as np
 import ising_model as I
 
+"""
+This script calculates five different thermodynamic quantities numerically and
+analytically for comparison and testing of the ising model setup.
+"""
+
 #============================ Numerical solutions=============================
 def numerical_solution(spin_matrix, num_cycles):
+    #This function calculates the numerical solution of our 2x2 ising model
+    #lattice, using the MC function from ising_model.py
     exp_values = I.MC(spin_matrix, num_cycles, temp)
     norm = 1.0/float(num_cycles)
     energy_avg = np.sum(exp_values[:,0])*norm
@@ -25,9 +32,10 @@ def numerical_solution(spin_matrix, num_cycles):
 max_cycles = 10000000
 num_spins = 2
 temp = 1.0
+# Array of Monte Carlo runs we want to evaluate, logarithmic spacing
 runs = np.logspace(2, int(np.log10(max_cycles)), (int(np.log10(max_cycles))-1), endpoint=True)
 spin_matrix = np.ones((num_spins, num_spins), np.int8)
-
+# Looping over the different number of Monte Carlo cycles
 for i, num_cycles in enumerate(runs):
     Energy, Magnetization, MagnetizationAbs, SpecificHeat, Susceptibility = \
     numerical_solution(spin_matrix, num_cycles)
